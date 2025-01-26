@@ -3,7 +3,8 @@
 This repository provides Dockerized environments to produce reproducible and
 verifiable builds of Dusk smart contracts. Each version corresponds to a
 specific, locked build environment. This ensures identical outputs and allows
-for auditability.
+for auditability. The version of the verifiable build is directly linked to 
+a [Duskc](https://github.com/dusk-network/rust/releases) version.
 
 ## Why Verifiable Builds?
 
@@ -20,8 +21,8 @@ toolchain and dependencies, ensuring deterministic outputs for `wasm32` and
 To build the image for a specific version:
 
 ```bash
-cd docker/0.1.0
-docker build --platform linux/amd64 . -t dusknode/dusk-verifiable-builds:0.1.0
+cd docker/0.2.0
+docker build --platform linux/amd64 . -t dusknode/dusk-verifiable-builds:0.2.0
 ```
 
 ## Pulling the Prebuilt Image
@@ -30,7 +31,7 @@ You can pull the prebuilt Docker image for a specific version from the container
 registry:
 
 ```bash
-docker pull dusknode/dusk-verifiable-builds:0.1.0
+docker pull dusknode/dusk-verifiable-builds:0.2.0
 ```
 
 ## Usage
@@ -42,7 +43,7 @@ docker run --rm \
     -v <path-to-contract-code>:/source \
     -v <path-to-output-folder>:/target \
     --mount type=volume,source=dusk_registry_cache,target=/root/.cargo/registry \
-    dusknode/dusk-verifiable-builds:0.1.0
+    dusknode/dusk-verifiable-builds:0.2.0
 ```
 
 ### Arguments Explanation
@@ -70,7 +71,7 @@ docker run --rm \
     -v <path-to-contract-code>:/source \
     -v <path-to-output-folder>:/target \
     --mount type=volume,source=dusk_registry_cache,target=/root/.cargo/registry \
-    dusknode/dusk-verifiable-builds:0.1.0
+    dusknode/dusk-verifiable-builds:0.2.0
     --target wasm64-unknown-unknown
 ```
 
@@ -81,7 +82,7 @@ docker run --rm \
     -v <path-to-contract-code>:/source \
     -v <path-to-output-folder>:/target \
     --mount type=volume,source=dusk_registry_cache,target=/root/.cargo/registry \
-    dusknode/dusk-verifiable-builds:0.1.0
+    dusknode/dusk-verifiable-builds:0.2.0
     --manifest-path contracts/charlie/Cargo.toml
 ```
 
@@ -94,12 +95,12 @@ This will run:
 ## Adding New Versions
 
 Each version of the Docker image corresponds to a reproducible build
-environment. To add a new version:
+environment for the corresponding Dusk compiler version. To add a new version:
 
 1. Create a new directory. Copy the existing version directory to a new one:
 
 ```bash
-cp -r docker/0.1.0 docker/0.2.0
+cp -r docker/0.2.0 docker/0.3.0
 ```
 
 2. Update Dependencies. If the Rust toolchain, dependencies or other components
@@ -121,5 +122,5 @@ docker push dusknode/dusk-verifiable-builds:0.2.0
 ### Versioning Philosophy
 
 Each version is immutable. Once released, it should NOT be modified. For
-example, version `0.1.0` will always correspond to the chosen Rust toolchain. If
-an update is required, create a new version.
+example, version `0.2.0` will always correspond to the chosen Rust toolchain. If
+an update is required, create a new version. Each version is mapped to the corresponding Dusk compiler version.
